@@ -41,8 +41,8 @@ pcd_save:
     interval: -1
 
 initial_pose:
-    position: [8.585503324866294861e-03, -1.540905237197875977e-02, 7.415168881416320801e-01]
-    orientation: [-3.416659310460090637e-04, 4.724707105197012424e-04, -9.999231100082397461e-01, 1.238826569169759750e-02]
+    position: [0.0, 0.0, 0.0]
+    orientation: [0.0, 0.0, 0.0, 1.0] #xyzw
 
 prior_map:
     path: "/media/jin/T7Shield/GPTR_data/cathhs_iot_prior_2cm.pcd" 

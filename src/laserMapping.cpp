@@ -336,6 +336,7 @@ bool timediff_set_flg = false;
 
 void livox_pcl_cbk(const livox_ros_driver::CustomMsg::ConstPtr &msg)
 {
+    // std::cout << "Triggered..." << std::endl;
     mtx_buffer.lock();
     scan_count++;
     if (msg->header.stamp.toSec() < last_timestamp_lidar)
@@ -1161,12 +1162,22 @@ int main(int argc, char **argv)
                 ROS_WARN("First frame, no points stored.");
             }
 
+            std::cout << "-----frame id: " << frame_id << std::endl;
+            // std::cout << "before process: " << frame_id << std::endl;
+            // std::cout << "t: " << state.pos_end.x() << ", " << state.pos_end.y() << ", " << state.pos_end.z() << ", " << std::endl;
+            // std::cout << "v: " << state.vel_end.x() << ", " << state.vel_end.y() << ", " << state.vel_end.z() << ", " << std::endl;
+
             p_imu->Process(Measures, state, feats_undistort);
 
             current_dt = p_imu->frame_dt;
             current_end_time = p_imu->frame_end_time;
 
             state_propagat = state;
+
+            // std::cout << "after process: " << frame_id << std::endl;
+            // std::cout << "t: " << state.pos_end.x() << ", " << state.pos_end.y() << ", " << state.pos_end.z() << ", " << std::endl;
+            // std::cout << "v: " << state.vel_end.x() << ", " << state.vel_end.y() << ", " << state.vel_end.z() << ", " << std::endl;
+            // std::cout << "q: " << state.rot.coeffs()[3] << ", " << state.rot.coeffs()[0] << ", " << state.rot.coeffs()[1] << ", " << state.rot.coeffs()[2] << std::endl;
 
 
             /*** Segment the map in lidar FOV ***/
@@ -1313,6 +1324,7 @@ int main(int argc, char **argv)
                         effect_feat_num++;
                     }
                 }
+                // std::cout << "ite " << iterCount << ",  effect_feat_num " << effect_feat_num << std::endl;
 
                 res_mean_last = total_residual / effect_feat_num;
 
@@ -1438,6 +1450,11 @@ int main(int argc, char **argv)
             *feats_down_body = point3DtoPCL(feats_points, UNDISTORT);
 
             last_state = state;
+
+            //!
+            // std::cout << "after optimize: " << frame_id << std::endl;
+            // std::cout << "t: " << state.pos_end.x() << ", " << state.pos_end.y() << ", " << state.pos_end.z() << ", " << std::endl;
+            // std::cout << "v: " << state.vel_end.x() << ", " << state.vel_end.y() << ", " << state.vel_end.z() << ", " << std::endl;
 
             /******* Publish odometry *******/
             publish_odometry(pubOdomAftMapped);

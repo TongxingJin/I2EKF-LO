@@ -222,15 +222,19 @@ void ImuProcess::Forward_propagation_without_imu(const MeasureGroup &meas, State
         b_first_frame_ = false;
         frame_dt = pcl_out.points.back().curvature / double(1000) - pcl_out.points.front().curvature / double(1000);
         frame_end_time = pcl_out.points.back().curvature;
+        time_last_scan = pcl_beg_time;
     }
     else
     {
         dt = pcl_beg_time - time_last_scan;
+        // std::cout << fixed << std::setprecision(12) << time_last_scan << std::endl;
+        // std::cout << fixed << std::setprecision(12) << pcl_beg_time << std::endl;
         time_last_scan = pcl_beg_time;
         frame_dt = pcl_out.points.back().curvature / double(1000) - pcl_out.points.front().curvature / double(1000);
         frame_end_time = pcl_out.points.back().curvature;
 
     }
+    // std::cout << "dt: " << dt << std::endl; 
 
     M3D Exp_f = Exp(state_inout.bias_g, dt);
     /** Forward propagation of attitude **/
